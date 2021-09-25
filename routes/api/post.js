@@ -144,6 +144,71 @@ router.post(
   }
 );
 
+// @route POST /api/post/comment/:id
+// @desc Add comment to post
+// @access Private
+router.post(
+  "/comment/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    const { id: postId } = req.params;
+    Post.findById(postId)
+      .then((post) => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id,
+        };
+
+        // Add comment to post
+        post.comments.unshift(newComment);
+
+        // Save comment
+        post.save().then((post) => res.json(post));
+      })
+      .catch((err) => {
+        res.status(404).json({ message: "Post not found!" });
+      });
+  }
+);
+
+// @route Delte /api/post/comment/:id/:comment_id
+// @desc Delete comment from post
+// @access Private
+router.delete(
+  "/comment/:id/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { id: postId, comment_id } = req.params;
+    const { id: userId } = req.user;
+    Post.findById(postId)
+      .then((post) => {
+        const userComment = post.comments.filter(
+          (e, i) => e.id === comment_id
+        )[0];
+        if (!userComment) {
+          return res.status(404).json({ message: "Comment not found!" });
+        }
+        if (userComment.user.toString() !== userId) {
+          return res
+            .status(401)
+            .json({ message: "The Comment is not your comment" });
+        }
+        post.comments = post.comments.filter((e, i) => e.id !== comment_id);
+        // Save comment
+        post.save().then((post) => res.json(post));
+      })
+      .catch((err) => {
+        res.status(404).json({ message: "Post not found!" });
+      });
+  }
+);
+
 // @route Delete /api/post/:id
 // @desc Delete Post
 // @access Private
