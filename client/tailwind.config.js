@@ -6,6 +6,19 @@ module.exports = {
       backgroundImage: {
         "landing-pattern": "url('/src/img/landing.jpg')",
       },
+      keyframes: {
+        textSplit: {
+          "0%": {
+            transform: "translateY(-25%)",
+          },
+          "50%": {
+            transform: "translateY(25%)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
+      },
     },
   },
   variants: {
@@ -14,6 +27,7 @@ module.exports = {
       borderWidth: ["hover", "focus"],
       borderColor: ["hover", "focus"],
       borderStyle: ["hover", "focus"],
+      animation: ["hover", "focus", "active"],
     },
   },
   plugins: [],
