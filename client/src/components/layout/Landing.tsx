@@ -1,6 +1,7 @@
 import React from "react";
 import "./Landing.css";
 import SplitText from "../SplitText";
+import { Link } from "react-router-dom";
 export default function Landing() {
   return (
     <div className="landing">
@@ -15,18 +16,18 @@ export default function Landing() {
             Create a developer profile/portfolio, share posts and get help from
             other developers
           </p>
-          <a
-            href="register.html"
+          <Link
+            to="./register"
             className="btn bg-blue-500 inline-block active:animate-bounce"
           >
             Sign Up
-          </a>
-          <a
-            href="login.html"
+          </Link>
+          <Link
+            to="./login"
             className="bg-white bg-opacity-50 btn active:animate-bounce inline-block"
           >
             Login
-          </a>
+          </Link>
         </div>
       </div>
     </div>

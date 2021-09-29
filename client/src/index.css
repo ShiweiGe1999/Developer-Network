@@ -4,6 +4,24 @@
 @tailwind utilities;
 
 body {
-  @apply bg-black bg-opacity-70 
+  @apply bg-black bg-opacity-70;
 }
 
+.formControl {
+  @apply mb-4;
+}
+
+.formInput {
+  @apply py-2 px-4 bg-black bg-opacity-20 rounded-xl w-full focus:outline-none  hover:border-white focus:border-white border-transparent border-2 border-solid;
+}
+
+.formInputError {
+  @apply py-2 px-4 bg-black bg-opacity-20 rounded-xl w-full focus:outline-none  border-red-400 border-2 text-red-400 border-solid;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
