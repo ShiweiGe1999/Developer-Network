@@ -1,11 +1,12 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
+
 export default function Login() {
   return (
     <div className="grid md:grid-cols-3 ">
       <div></div>
-      <div className="p-4" style={{ minWidth: "400px" }}>
+      <div className="p-4 mt-20" style={{ minWidth: "400px" }}>
         <Formik
           initialValues={{
             email: "",
@@ -34,7 +35,7 @@ export default function Login() {
             return (
               <form
                 onSubmit={handleSubmit}
-                className="p-4 mt-20 border-2 border-solid border-opacity-50 text-white rounded-md"
+                className="p-4 border-2 border-solid border-opacity-50 text-white rounded-md"
               >
                 <div className="formControl">
                   <h1>Email</h1>
