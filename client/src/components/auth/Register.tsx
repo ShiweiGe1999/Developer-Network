@@ -1,11 +1,15 @@
-import React from "react";
 import { Formik } from "formik";
+import React from "react";
+import { useHistory } from "react-router";
 import * as Yup from "yup";
+import { useAppDispatch } from "../../hooks";
+import { register } from "../../reducers/authReducer";
 import SplitText from "../SplitText";
-import axios from "axios";
 export default function Register() {
+  const dispatch = useAppDispatch();
+  const history = useHistory();
   return (
-    <div className="grid md:grid-cols-3 ">
+    <div className="grid md:grid-cols-3 h-screen">
       <div></div>
       <div className="p-4 mt-2" style={{ minWidth: "400px" }}>
         <h1 className="text-center text-3xl pb-4">
@@ -43,16 +47,7 @@ export default function Register() {
               password: values.password,
               password2: values.password2,
             };
-            axios
-              .post("/api/users/register", newUser)
-              .then((res) => {
-                console.log(res.data);
-                resetForm();
-              })
-              .catch((err) => {
-                console.log(err.response.data);
-                setSubmitting(false);
-              });
+            dispatch(register([newUser, history]))
           }}
         >
           {({
@@ -84,6 +79,7 @@ export default function Register() {
                     value={values.name}
                     type="text"
                     placeholder="Name"
+                    disabled={isSubmitting}
                     className={
                       touched.name && errors.name
                         ? "formInputError"
@@ -106,6 +102,7 @@ export default function Register() {
                     value={values.email}
                     type="text"
                     placeholder="Email"
+                    disabled={isSubmitting}
                     className={
                       touched.email && errors.email
                         ? "formInputError"
@@ -128,6 +125,7 @@ export default function Register() {
                     placeholder="Password"
                     name="password"
                     type="password"
+                    disabled={isSubmitting}
                     className={
                       touched.password && errors.password
                         ? "formInputError"
@@ -150,6 +148,7 @@ export default function Register() {
                     placeholder="Confirm Password"
                     name="password2"
                     type="password"
+                    disabled={isSubmitting}
                     className={
                       touched.password2 && errors.password2
                         ? "formInputError"
