@@ -28,6 +28,7 @@ module.exports = {
       borderColor: ["hover", "focus"],
       borderStyle: ["hover", "focus"],
       animation: ["hover", "focus", "active"],
+      cursor: ["hover", "focus"],
     },
   },
   plugins: [],

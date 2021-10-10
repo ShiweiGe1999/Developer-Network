@@ -1,5 +1,6 @@
 .landing {
-  @apply h-screen w-full bg-landing-pattern bg-cover bg-bottom  ;
+  @apply h-screen bg-landing-pattern bg-cover bg-bottom;
+  min-width: 500px;
 }
 
 .overlay {

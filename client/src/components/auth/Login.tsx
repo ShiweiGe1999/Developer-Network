@@ -1,12 +1,55 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-
+import SplitText from "../SplitText";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { login } from "../../reducers/authReducer";
+import { selectAuth } from "../../reducers/authReducer";
+import { useEffect } from "react";
+import { useHistory } from "react-router";
+import { Alert } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { clearErrors } from "../../reducers/errorReducer";
+import { selectErrors } from "../../reducers/errorReducer";
+import { CircularProgress } from "@mui/material";
+const useStyles = makeStyles({
+  root: {
+    marginBottom: "0.3rem",
+  },
+});
 export default function Login() {
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector(selectAuth);
+  const globalErrors = useAppSelector(selectErrors);
+  const history = useHistory();
+  const classes = useStyles();
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      history.push("/dashboard");
+    }
+  }, [auth.isAuthenticated, auth.errors, history]);
   return (
-    <div className="grid md:grid-cols-3 ">
+    <div className="grid md:grid-cols-3 h-screen">
       <div></div>
       <div className="p-4 mt-20" style={{ minWidth: "400px" }}>
+        <h1 className="text-center text-3xl pb-4">
+          <SplitText copy="Login" />
+        </h1>
+        <p className="pb-8 text-white text-2xl font-serif text-center">
+          Connect with millons of developers around the world
+        </p>
+        {Object.keys(globalErrors).length > 0 && (
+          <Alert
+            severity="error"
+            onClose={() => {
+              dispatch(clearErrors());
+            }}
+            variant="filled"
+            className={classes.root}
+          >
+            Email or Password incorrect!
+          </Alert>
+        )}
         <Formik
           initialValues={{
             email: "",
@@ -21,7 +64,13 @@ export default function Login() {
               .max(18, "Password must be less than 18 characters")
               .required("Password must not be empty"),
           })}
-          onSubmit={(values, { setSubmitting }) => {}}
+          onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+              dispatch(login(values));
+              setSubmitting(false);
+            }, 3000);
+            setSubmitting(true);
+          }}
         >
           {({
             values,
@@ -49,6 +98,7 @@ export default function Login() {
                     value={values.email}
                     type="text"
                     placeholder="Email"
+                    disabled={isSubmitting}
                     className={
                       touched.email && errors.email
                         ? "formInputError"
@@ -71,6 +121,7 @@ export default function Login() {
                     placeholder="Password"
                     name="password"
                     type="password"
+                    disabled={isSubmitting}
                     className={
                       touched.password && errors.password
                         ? "formInputError"
@@ -82,12 +133,19 @@ export default function Login() {
                   ) : null}
                 </div>
                 <div className="formControl mt-4">
-                  <button
-                    className="w-full bg-black p-2 rounded-full mt-2 hover:border-white hover:bg-opacity-20 border-transparent border-2 border-solid box-border"
-                    type="submit"
-                  >
-                    Login
-                  </button>
+                  {isSubmitting ? (
+                    <div className="mt-4 text-center">
+                      <CircularProgress color="inherit" className="h-full" />
+                    </div>
+                  ) : (
+                    <button
+                      className="w-full bg-black p-2 rounded-full mt-2 hover:border-white hover:bg-opacity-20 border-transparent border-2 border-solid box-border"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      Login
+                    </button>
+                  )}
                 </div>
               </form>
             );
